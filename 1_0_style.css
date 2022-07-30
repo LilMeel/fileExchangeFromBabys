@@ -1,6 +1,16 @@
+div{
+    border-radius: 30px;
+}
+input{
+    border-radius: 15px;
+}
+
+body{
+    background-color: black;
+}
 .headline {
     text-transform: capitalize; 
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     text-align: center;
     font-size: 45px;
     }
@@ -9,7 +19,7 @@
     height: 250px;
     border: 5px;
     border-style: solid;
-    border-color: black;
+    border-color: rgb(255, 255, 255);
     margin-left: auto;
     margin-right: auto;
     margin-top: 50px;
@@ -29,20 +39,23 @@
     width: 300px;
     height: 50px;
     border: 3px;
-    border-color: black;
+    border-color: rgb(255, 255, 255);
+    background-color: black;
     border-style: solid;
     text-align: center;
     font-size: 22px;
-    color: black;
+    color: rgb(0, 0, 0);
 }
 #sign {
     width: 100px;
     height: 35px;
     border: 2px;
-    background-color: white;
-    border-color: black;
+    background-color: black;
+    border-color: rgb(255, 255, 255);
     border-style: solid;
+    border-radius: 10px;
     text-align: center;
+    color: white;
     font-size: 22px;
 }
 #signin {
