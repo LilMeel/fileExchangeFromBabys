@@ -1,0 +1,52 @@
+.headline {
+    text-transform: capitalize; 
+    color: rgb(0, 0, 0);
+    text-align: center;
+    font-size: 45px;
+    }
+#rec {
+    width: 500px;
+    height: 250px;
+    border: 5px;
+    border-style: solid;
+    border-color: black;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
+#Enter {
+    margin-left: 21%;
+    margin-top: 40px;
+    
+}
+
+#pass {
+    margin-top: 40px;
+    width: 300px;
+    height: 50px;
+}
+.all {
+    width: 300px;
+    height: 50px;
+    border: 3px;
+    border-color: black;
+    border-style: solid;
+    text-align: center;
+    font-size: 22px;
+    color: black;
+}
+#sign {
+    width: 100px;
+    height: 35px;
+    border: 2px;
+    background-color: white;
+    border-color: black;
+    border-style: solid;
+    text-align: center;
+    font-size: 22px;
+}
+#signin {
+    margin-left: 26.5%;
+    margin-top: 4%;
+    
+}
