@@ -69,14 +69,17 @@ a:visited{
     color: white;
 }
 #up {
-    width: 100%;
+    width: 69%;
     height: 605px;
     border:3px;
     border-style: dashed;
     border-color: rgb(255, 255, 255);
-    margin-left: auto;
+    margin-left: 0px;
     margin-right: auto;
     margin-top: 10px;
+}
+.imga{
+    object-position: -72px;
 }
 #in {
     display: none;
@@ -86,4 +89,20 @@ a:visited{
     margin-left: 30%;
     margin-right: auto;
     margin-top: 10%;
+}
+.news{
+    width: 29%;
+    height: 605px;
+    border: 3px;
+    border-style: dashed;
+    border-color: white;
+    margin-left: auto;
+    margin-right: 0px;
+    margin-top: -611px;
+}
+.history{
+    color: white;
+    font-size: 50px;
+    text-align: center;
+    margin-top: 0px;
 }
