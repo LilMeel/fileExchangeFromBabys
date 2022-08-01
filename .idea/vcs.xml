@@ -2,5 +2,11 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/fileExchange/fileExchangeFromBabys" vcs="" />
+    <mapping directory="$PROJECT_DIR$/main/fileExchangeFromBabys" vcs="" />
+    <mapping directory="$PROJECT_DIR$/src/fileExchange/stoleAStone/templates" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/fileExchangeFromBabys" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/stoleAStone/templates" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/templates" vcs="Git" />
   </component>
 </project>
