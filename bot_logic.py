@@ -6,29 +6,39 @@ from aiogram.types import KeyboardButton
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from db_connection import try_to_add
-from config import TOKEN
+from config import TOKEN, RESTORE_QUESTIONS
 
 storage = MemoryStorage()
 bot = Bot(token=TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher(bot, storage=storage)
 
 class Form(StatesGroup):
     check_login = State()
     check_password = State()
+    check_restore_question = State()
 
 
 def check_symbols(pass_str):
-    res_sum = 0
+    conditions = [0, 0, 0, 1]
     for symbol in pass_str:
         if 'a'<= symbol <='z':
-            res_sum += 1
+            conditions[0] = 1
         elif 'A'<= symbol <='Z':
-            res_sum += 1
+            conditions[1] = 1
         elif '0' <= symbol <= '9':
-            res_sum += 1
-    if(res_sum == 3):
-        return True
-    return False
+            conditions[2] = 1
+        elif symbol == " ":
+            conditions[3] = 0
+    if 0 in conditions:
+        return False
+    return True
+
+
+def questions_payload():
+    payload = ""
+    for question in RESTORE_QUESTIONS:
+        payload += question + '\n'
+    return payload
 
 
 @dp.message_handler(commands=['start'])
@@ -51,31 +61,43 @@ async def reg_new_user(message: types.Message):
     await message.reply("Это регистрация на ресурсе stole")
 
 
-@dp.message_handler(state=Form.check_password)
-async def process_check_password(message: types.Message, state: FSMContext):
-    password = message.text
-    if len(login) > 32 or len(login) < 8:
-        await message.reply("Недопустимая длина пароля! Допускается от 8 до 32 символов")
-    if not check_symbols(password):
-        await message.reply("В пароле должна быть хотя бы одна: \n цифра, \n маленькая буква, \n заглавная буква")
-    async with state.proxy() as data:
-        data['ref1'] = password
-
-
 @dp.message_handler(state=Form.check_login)
 async def process_check_login(message: types.Message, state: FSMContext):
     login = message.text
-    if(len(login) > 32 or len(login) < 8):
-        await message.reply("Недопустимая длина логина! Допускается от 8 до 32 символов")
+    if len(login) > 32 or len(login) < 5:
+        await message.reply("Недопустимая длина логина! Допускается от 5 до 32 символов")
         return
-    await Form.check_password.set()
     async with state.proxy() as data:
-        password = data['ref1']
-        try_to_add(login, password)
+        data['ref1'] = login
+    await bot.send_message(message.from_user.id, text="Введите пароль: ")
+    await Form.check_password.set()
+
+
+@dp.message_handler(state=Form.check_password)
+async def process_check_password(message: types.Message, state: FSMContext):
+    password = message.text
+    if len(password) > 32 or len(password) < 8:
+        await message.reply("Недопустимая длина пароля! Допускается от 8 до 32 символов")
+    if not check_symbols(password):
+        await message.reply("В пароле должна быть хотя бы одна: \n1.Цифра, \n2.Маленькая буква, \n3.Заглавная буква")
+        return
+    async with state.proxy() as data:
+        login = data['ref1']
+        res = try_to_add(login, password)
+        await message.reply(res)
+    await state.finish()
+
+"""@dp.message_handler(state=Form.check_restore_question)
+async def process_check_restore_question(message: types.Message, state: FSMContext):
+    await message.text("Выберите из списка: \n"+ questions_payload())
+    await Form.check_restore_question().set()
+    async with state.proxy() as data:
+        
+    answer = RESTORE_QUESTIONS[]"""
 
 
 
-def login():
+def start_bot():
     executor.start_polling(dp)
 
 

@@ -1,53 +1,52 @@
 import pymysql.cursors
 import config
-import datetime
+from datetime import datetime
 # Подключиться к базе данных.
-
-id = 0
 
 def connect():
     connection = None
     try:
         connection = pymysql.connect(host='127.0.0.1',
-                                     user='root',
+                                     port=3306,
+                                     user='telegram_appendbd',
                                      password=f'{config.USER_PASSWORD}',
                                      db=f'{config.DB_NAME}',
                                      cursorclass=pymysql.cursors.DictCursor)
         print("DB connected!")
 
-        id_command = "SELECT MAX(`id`) FROM `users`"
         cursor = connection.cursor()
-        global id
-        id = cursor.execute(id)
     except Exception as e:
         print(f"The error '{e}' occurred")
         exit(0)
     return connection
 
-def check(cursor, login, password):
-    cursor.execute(f"SELECT * FROM users WHERE login={login} AND password={password}")
-    return cursor.fetchone()
+def check(cursor, login):
+    res = cursor.execute(f"SELECT * FROM users WHERE login=%s", (login,))
+    if res:
+        return True
+    return False
 
 def try_to_add(login, password):
     connection = connect()
-    connection_cursor = connect().cursor()
+    cursor = connection.cursor()
+    res_str = ""
     try:
-        if not check(connection_cursor):
-            connection.close()
-            return False
-        create_users = f"""
-        INSERT INTO
-          `users` (`id`, `login`, `password`, `signup_date`)
-        VALUES
-          ({id}, {login}, {password}, {datetime.date.strftime("%d. %B %Y")});
-        """
+        if check(cursor, login):
+            res_str = "Данный аккаунт уже существует"
+            return res_str
+        create_users = "INSERT INTO `users` (`login`, `password`, `signup_date`) VALUES (%s, %s, %s);"
 
-        connection_cursor.execute(create_users)
+        values = [login, password, datetime.now().strftime("%Y-%m-%d")]
+        cursor.execute(create_users, values)
         connection.commit()
+        res_str = f"Аккаунт {login} зарегистрирован"
     except Exception as ex:
+        res_str = "Ошибка в базе данных"
         print(ex)
     finally:
+        print("DB disconnected")
         connection.close()
+        return res_str
 
 
 
