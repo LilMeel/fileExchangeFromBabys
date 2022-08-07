@@ -79,7 +79,7 @@ async def process_check_login(message: types.Message, state: FSMContext):
     await RegistrationForm.next()
 
 
-@dp.message_handler(state=Form.check_password)
+@dp.message_handler(state=RegistrationForm.check_password)
 async def process_check_password(message: types.Message, state: FSMContext):
     password = message.text
     if len(password) > 32 or len(password) < 8:
@@ -90,10 +90,10 @@ async def process_check_password(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data["ref2"] = password
     await bot.send_message(message.from_user.id, text="Выберите из списка: \n" + questions_payload())
-    await Form.next()
+    await RegistrationForm.next()
 
 
-@dp.message_handler(state=Form.choose_restore_question)
+@dp.message_handler(state=RegistrationForm.choose_restore_question)
 async def process_choose_restore_question(message: types.Message, state: FSMContext):
     try:
         num_of_question = int(message.text)
@@ -108,10 +108,10 @@ async def process_choose_restore_question(message: types.Message, state: FSMCont
         data["ref3"] = num_of_question
     index = RESTORE_QUESTIONS[num_of_question-1].find(". ") + 1
     await message.reply(f"Введите секретное слово для восстановления пароля:\n-{RESTORE_QUESTIONS[num_of_question-1][index::]}")
-    await Form.next()
+    await RegistrationForm.next()
 
 
-@dp.message_handler(state=Form.check_restore_question)
+@dp.message_handler(state=RegistrationForm.check_restore_question)
 async def process_check_restore_question(message: types.Message, state: FSMContext):
     answer = message.text
     async with state.proxy() as data:
